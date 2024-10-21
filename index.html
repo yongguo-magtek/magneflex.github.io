@@ -10,14 +10,16 @@ http://www.w3.org/1999/xhtml">
 
 <h1>NFC Functions</h1>
 <br />
-<textarea id="testinput" rows="5"></textarea>
+<textarea id="testinput" style="width: 100%;" rows="5"></textarea>
 <br />
 <button onclick="testScript();">Test</button>
+<button onclick="startNFCListener();">Start</button>
+<button onclick="stopNFCListener();">Stop</button>
 <br />
 <div>
     <button>Clear Log</button>
     <br />
-<textarea id="logarea" rows="20"></textarea>
+<textarea id="logarea" style="width: 100%;" rows="20"></textarea>
 </div>
 
 <script lang="javascript">
@@ -37,7 +39,15 @@ http://www.w3.org/1999/xhtml">
         log("    " + e.data);
     }
 
-    MTMagneFlexLib.addEventListener("all", dumpEvent)
+    function startNFCListener() {
+        MTMagneFlexLib.addEventListener("all", dumpEvent)
+    }
+
+    function stopNFCListener() {
+        MTMagneFlexLib.removeEventListener("all", dumpEvent)
+    }
+
+    
 </script>
 
 </html>
