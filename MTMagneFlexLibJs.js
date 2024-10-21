@@ -582,6 +582,9 @@ var MTMagneFlexLib = {
         readerArgument = new MTMagneFlexParameter.readerParameter();
         readerArgument.operation = MagneFlexOp.REQUEST_OPEN_DEVICE;
         requestArgument = new MTMagneFlexParameter.requestParameter();
+        requestArgument.httpMethod = HTTPMethod.NONE;
+        requestArgument.closeDeviceAfter = false;
+        requestArgument.destinationURL = "";
         this.requestOpenDevice(readerArgument, requestArgument, result)
 
     },
