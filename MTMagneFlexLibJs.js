@@ -293,6 +293,7 @@ var MTMagneFlexLib = {
         if (openDeviceCallback) {
             this.openDeviceCallback = openDeviceCallback;
         }
+        requestArgument.operation = MagneFlexOp.REQUEST_OPEN_DEVICE;
         var request = this.buildRequestQuery(requestArgument, ParamType.Request) + this.buildRequestQuery(readerArgument, ParamType.Reader);
 
         this.buildAndSendRequest(request, requestArgument, readerArgument);
@@ -301,6 +302,7 @@ var MTMagneFlexLib = {
         if (closeDeviceCallback) {
             this.closeDeviceCallback = closeDeviceCallback;
         }
+        requestArgument.operation = MagneFlexOp.REQUEST_CLOSE_DEVICE;
         var request = this.buildRequestQuery(requestArgument, ParamType.Request) + this.buildRequestQuery(readerArgument, ParamType.Reader);
 
         this.buildAndSendRequest(request, requestArgument, readerArgument);
@@ -580,9 +582,8 @@ var MTMagneFlexLib = {
         readerArgument = new MTMagneFlexParameter.readerParameter();
         readerArgument.operation = MagneFlexOp.REQUEST_OPEN_DEVICE;
         requestArgument = new MTMagneFlexParameter.requestParameter();
-        var request = this.buildRequestQuery(requestArgument, ParamType.Request) + this.buildRequestQuery(readerArgument, ParamType.Reader);
+        this.requestOpenDevice(readerArgument, requestArgument, result)
 
-        this.buildAndSendRequest(request, requestArgument, readerArgument);
     },
     removeEventListener : function (name, callback) {
         if (typeof callback === "undefined") {
