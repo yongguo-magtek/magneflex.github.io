@@ -1,0 +1,2 @@
+testscript -- onEvent
+MTMagneFlexLib.onEvent("Test1", "Data1"); // fire for all , Test1

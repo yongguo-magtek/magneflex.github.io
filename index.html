@@ -1,1 +1,43 @@
-Hello World
+<!DOCTYPE html>
+<html xmlns="
+http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="MTMagneFlexLibJs.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" type="text/javascript"></script>
+<title>MagneFlex Sample</title>
+
+<h1>NFC Functions</h1>
+<br />
+<textarea id="testinput" rows="5"></textarea>
+<br />
+<button onclick="testScript();">Test</button>
+<br />
+<div>
+    <button>Clear Log</button>
+    <br />
+<textarea id="logarea" rows="20"></textarea>
+</div>
+
+<script lang="javascript">
+    function testScript() {
+        var script = $("#testinput").val();
+        eval(script);
+    };
+
+    function log (x) {
+        logArea = $("#logarea");
+        logArea.val( logArea.val() + x + "\n" );
+    }
+
+    function dumpEvent(e) {
+        log("event : ")
+        log("    " + e.name);
+        log("    " + e.data);
+    }
+
+    MTMagneFlexLib.addEventListener("all", dumpEvent)
+</script>
+
+</html>
