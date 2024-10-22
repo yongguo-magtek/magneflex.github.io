@@ -587,7 +587,7 @@ var MTMagneFlexLib = {
         if (callback === "undefined") {
             return;
         }
-        
+
         this.eventPool.push({ name:name, callback:callback });
 
         readerArgument = new MTMagneFlexParameter.readerParameter();
@@ -608,18 +608,32 @@ var MTMagneFlexLib = {
         }
         else if (typeof callback === "undefined") {
             // remove all with this name
-            var index = this.eventPool.findIndex(e=>e.name == name);
-            if (index >= 0) {
-                this.eventPool.splice(index,1);
+            var index = 0
+            while (index >= 0) 
+            {
+                index = this.eventPool.findIndex(e=>e.name == name);
+                if (index >= 0) {
+                    this.eventPool.splice(index,1);
+                }
             }
         } else {
             // remove one
-            var index = this.eventPool.indexOf({ name:name, callback:callback });
+            var index = this.eventPool.findIndex(e=>e.name == name);
             if (index >= 0) {
                 this.eventPool.splice(index,1);
             }
         }
         
+        if (this.eventPool.length == 0) {
+            readerArgument = new MTMagneFlexParameter.readerParameter();
+        
+            requestArgument = new MTMagneFlexParameter.requestParameter();
+            requestArgument.operation = MagneFlexOp.REQUEST_CLOSE_DEVICE;
+            requestArgument.httpMethod = HTTPMethod.NONE;
+            requestArgument.closeDeviceAfter = true;
+            requestArgument.destinationURL = "";
+            this.requestOpenDevice(readerArgument, requestArgument, result)
+        }
     }
 };
 
