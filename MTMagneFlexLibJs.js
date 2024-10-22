@@ -568,6 +568,13 @@ var MTMagneFlexLib = {
     onEvent: function(name, data) {
 
         evtObject = { name : name, data : data };
+
+        // fire for name for equal
+        var callbackforname = this.eventPool.filter(e => e.name == name);
+        for (cb in callbackforname) {
+            evthandler = callbackforname[cb];
+            evthandler.callBack(evtObject);
+        }
         
         // fire for name for "all"
         var callbackforall = this.eventPool.filter(e => e.name == "all");
@@ -577,6 +584,10 @@ var MTMagneFlexLib = {
         }
     },
     addEventListener : function (name, callback, result) {
+        if (callback === "undefined") {
+            return;
+        }
+        
         this.eventPool.push({ name:name, callback:callback });
 
         readerArgument = new MTMagneFlexParameter.readerParameter();
@@ -591,15 +602,16 @@ var MTMagneFlexLib = {
 
     },
     removeEventListener : function (name, callback) {
-        if (typeof callback === "undefined") {
+        if (name === "*") {
+            // remove all listeners
+            this.eventPool.length = 0;
+        }
+        else if (typeof callback === "undefined") {
             // remove all with this name
             var index = this.eventPool.findIndex(e=>e.name == name);
             if (index >= 0) {
                 this.eventPool.splice(index,1);
             }
-        } else if (name === "*") {
-            // remove all listeners
-            this.eventPool.length = 0;
         } else {
             // remove one
             var index = this.eventPool.indexOf({ name:name, callback:callback });

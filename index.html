@@ -17,7 +17,7 @@ http://www.w3.org/1999/xhtml">
 <button onclick="stopNFCListener();">Stop</button>
 <br />
 <div>
-    <button>Clear Log</button>
+    <button onclick="clearLog();">Clear Log</button>
     <br />
 <textarea id="logarea" style="width: 100%;" rows="20"></textarea>
 </div>
@@ -31,8 +31,15 @@ http://www.w3.org/1999/xhtml">
 
     function log (x) {
         logArea = $("#logarea");
-        logArea.val( logArea.val() + x + "\n" );
+        var newValue = logArea.val() + x + "\n";
+        logArea.val( newValue );
+        logArea.setSelectionRange(newValue.length,newValue.length);
         console.log(x + "\n");
+    }
+
+    function clearLog (x) {
+        logArea = $("#logarea");
+        logArea.val( "" );
     }
 
     function dumpEvent(e) {
