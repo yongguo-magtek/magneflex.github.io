@@ -580,8 +580,10 @@ var MTMagneFlexLib = {
         this.eventPool.push({ name:name, callback:callback });
 
         readerArgument = new MTMagneFlexParameter.readerParameter();
-        readerArgument.operation = MagneFlexOp.REQUEST_OPEN_DEVICE;
+        
+        readerArgument.timeLimit = '3C';
         requestArgument = new MTMagneFlexParameter.requestParameter();
+        requestArgument.operation = MagneFlexOp.REQUEST_OPEN_DEVICE;
         requestArgument.httpMethod = HTTPMethod.NONE;
         requestArgument.closeDeviceAfter = false;
         requestArgument.destinationURL = "";
