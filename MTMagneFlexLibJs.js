@@ -632,7 +632,7 @@ var MTMagneFlexLib = {
             requestArgument.httpMethod = HTTPMethod.NONE;
             requestArgument.closeDeviceAfter = true;
             requestArgument.destinationURL = "";
-            this.requestOpenDevice(readerArgument, requestArgument, result)
+            this.requestCloseDevice(readerArgument, requestArgument, function(x){ log("CloseDeviceComplete:"+x) });
         }
     }
 };
