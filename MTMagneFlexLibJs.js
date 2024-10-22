@@ -559,12 +559,7 @@ var MTMagneFlexLib = {
         }
     },
     eventPool : [],
-    availableEventName : [
-        "nfc_detected",
-        "nfc_removed",
-        "barcode_detected",
-        "barcode_removed"
-    ],
+
     onEvent: function(name, data) {
 
         evtObject = { name : name, data : data };
