@@ -17,8 +17,11 @@ var MagneFlexOp = {
     REQUEST_DATA: { value: "requestData" },
     REQUEST_SCAN_BARCODE: { value: "requestScanBarCode" },
     REQUEST_STOP_BARCODE_READER: { value: "requestStopBarCodeReader" },
-    REQUEST_OPEN_DEVICE: { value: "openDevice" },
-    REQUEST_CLOSE_DEVICE: { value: "closeDevice" },
+    REQUEST_OPEN_DEVICE: { value: "requestOpenDevice" },
+    REQUEST_CLOSE_DEVICE: { value: "requestCloseDevice" },
+    REQUEST_START_NFC: {value : "requestStartNFC"},
+    REQUEST_STOP_NFC: {value : "requestStopNFC"},
+    REQUEST_SEND_NFC_COMMAND: {value : "requestSendNFCCommand"},
     NONE: { value: "NONE" }
 };
 
@@ -152,6 +155,18 @@ function onOpenDeviceComplete(e) {
 
 function onCloseDeviceComplete(e) {
     MTMagneFlexLib.closeDeviceCallback(e);
+}
+
+function onStartNFCComplete(e) {
+    MTMagneFlexLib.onStartNFCCallback(e);
+}
+
+function onStopNFCComplete(e) {
+    MTMagneFlexLib.onStopNFCCallback(e);
+}
+
+function onSendNFCCommandComplet(e) {
+    MTMagneFlexLib.onSendNFCCommandCallback(e);
 }
 
 var MTMagneFlexHelper = {
@@ -308,9 +323,40 @@ var MTMagneFlexLib = {
         this.buildAndSendRequest(request, requestArgument, readerArgument);
     },
 
+    requestStartNFC : function (readerArgument, requestArgument, startNFCCallback) {
+        if (startNFCCallback) {
+            this.onStartNFCCallback = startNFCCallback;
+        }
+        requestArgument.operation = MagneFlexOp.REQUEST_START_NFC;
+        var request = this.buildRequestQuery(requestArgument, ParamType.Request) + this.buildRequestQuery(readerArgument, ParamType.Reader);
+
+        this.buildAndSendRequest(request, requestArgument, readerArgument);
+    },
+
+    requestStopNFC : function (readerArgument, requestArgument, stopNFCCallback) {
+        if (stopNFCCallback) {
+            this.onStopNFCCallback = stopNFCCallback;
+        }
+        requestArgument.operation = MagneFlexOp.REQUEST_STOP_NFC;
+        var request = this.buildRequestQuery(requestArgument, ParamType.Request) + this.buildRequestQuery(readerArgument, ParamType.Reader);
+
+        this.buildAndSendRequest(request, requestArgument, readerArgument);
+    },
+
+    requestSendNFCCommand : function (readerArgument, requestArgument, sendNFCCommandCallback) {
+        if (sendNFCCommandCallback) {
+            this.onSendNFCCommandCallback = sendNFCCommandCallback;
+        }
+        requestArgument.operation = MagneFlexOp.REQUEST_SEND_NFC_COMMAND;
+        var request = this.buildRequestQuery(requestArgument, ParamType.Request) + this.buildRequestQuery(readerArgument, ParamType.Reader);
+
+        this.buildAndSendRequest(request, requestArgument, readerArgument);
+    },
+
     buildAndSendRequest: function (request, requestParam, readerParam) {
         var curUserAgent = navigator.userAgent;
         var curReqOp = MTMagneFlexHelper.parseQueryString(request);
+        
         if (curReqOp["operation"] == MagneFlexOp.REQUEST_CARD_SWIPE.value) {
             if (curUserAgent.indexOf("MAGNEFLEX-ANDROID") > 0) {
                 WebViewJSInterface.RequestCardSwipe(request);
@@ -527,7 +573,46 @@ var MTMagneFlexLib = {
                     mfxJSInterface.requestCloseDevice(readerParam, requestParam, onCloseDeviceComplete);
                 })();
             }
-        }
+        } else if (curReqOp["operation"] == MagneFlexOp.REQUEST_START_NFC.value) {
+            if (curUserAgent.indexOf("MAGNEFLEX-ANDROID") > 0) {
+                WebViewJSInterface.RequestStartNFC(request);
+            }
+            else if (curUserAgent.indexOf("MAGNEFLEX-IOS") > 0) {
+                window.webkit.messageHandlers.RequestStartNFC.postMessage(request);
+            }
+            else if (curUserAgent.indexOf("Windows") > 0) {
+                (async function () {
+                    await CefSharp.BindObjectAsync('mfxJSInterface');
+                    mfxJSInterface.requestStartNFC(readerParam, requestParam, onStartNFCComplete);
+                })();
+            }
+        } else if (curReqOp["operation"] == MagneFlexOp.REQUEST_STOP_NFC.value) {
+            if (curUserAgent.indexOf("MAGNEFLEX-ANDROID") > 0) {
+                WebViewJSInterface.RequestStopNFC(request);
+            }
+            else if (curUserAgent.indexOf("MAGNEFLEX-IOS") > 0) {
+                window.webkit.messageHandlers.RequestStopNFC.postMessage(request);
+            }
+            else if (curUserAgent.indexOf("Windows") > 0) {
+                (async function () {
+                    await CefSharp.BindObjectAsync('mfxJSInterface');
+                    mfxJSInterface.requestStopNFC(readerParam, requestParam, onStopNFCComplete);
+                })();
+            }
+        } else if (curReqOp["operation"] == MagneFlexOp.REQUEST_SEND_NFC_COMMAND.value) {
+            if (curUserAgent.indexOf("MAGNEFLEX-ANDROID") > 0) {
+                WebViewJSInterface.RequestSendNFCCommand(request);
+            }
+            else if (curUserAgent.indexOf("MAGNEFLEX-IOS") > 0) {
+                window.webkit.messageHandlers.RequestSendNFCCommand.postMessage(request);
+            }
+            else if (curUserAgent.indexOf("Windows") > 0) {
+                (async function () {
+                    await CefSharp.BindObjectAsync('mfxJSInterface');
+                    mfxJSInterface.requestSendNFCCommand(readerParam, requestParam, onSendNFCCommandComplet);
+                })();
+            }            
+        }        
     },
     buildRequestQuery: function (request, type) {
 
@@ -578,6 +663,12 @@ var MTMagneFlexLib = {
             evthandler.callback(evtObject);
         }
     },
+
+    urlToObject : function (url) {
+        var obj = JSON.parse('{"' + decodeURI(url).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+        return obj;
+    },
+
     addEventListener : function (name, callback, result) {
         if (callback === "undefined") {
             return;
@@ -596,6 +687,7 @@ var MTMagneFlexLib = {
         this.requestOpenDevice(readerArgument, requestArgument, result)
 
     },
+
     removeEventListener : function (name, callback) {
         if (name === "*") {
             // remove all listeners

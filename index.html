@@ -62,20 +62,30 @@ http://www.w3.org/1999/xhtml">
     function startNFCAccess() {
         readerArgument = new MTMagneFlexParameter.readerParameter();
         readerArgument.timeLimit = '1E';
-        readerArgument.hideUI = false;
-        readerArgument.command = "";
+        readerArgument.hideUI = true;
 
         
         requestArgument = new MTMagneFlexParameter.requestParameter();
-        requestArgument.operation = MagneFlexOp.REQUEST_SEND_COMMAND;
+        requestArgument.operation = MagneFlexOp.REQUEST_START_NFC;
         requestArgument.httpMethod = HTTPMethod.NONE;
         requestArgument.closeDeviceAfter = false;
         requestArgument.destinationURL = "";
-        MTMagneFlexLib.requestSendCommand(readerArgument,requestArgument,)
+        MTMagneFlexLib.requestStartNFC(readerArgument,requestArgument,function (x){log("startNFC Response : " + x)})
     }
 
     function stopNFCAccess() {
+        readerArgument = new MTMagneFlexParameter.readerParameter();
+        readerArgument.timeLimit = '1E';
+        readerArgument.hideUI = true;
+
         
+        requestArgument = new MTMagneFlexParameter.requestParameter();
+        requestArgument.operation = MagneFlexOp.REQUEST_STOP_NFC;
+        requestArgument.httpMethod = HTTPMethod.NONE;
+        requestArgument.closeDeviceAfter = false;
+        requestArgument.destinationURL = "";
+        MTMagneFlexLib.requestStopNFC(readerArgument,requestArgument,function (x){log("stopNFC Response : " + x)})
+
     }
 
     function sendCommand() {
