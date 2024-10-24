@@ -165,7 +165,7 @@ function onStopNFCComplete(e) {
     MTMagneFlexLib.onStopNFCCallback(e);
 }
 
-function onSendNFCCommandComplet(e) {
+function onSendNFCCommandComplete(e) {
     MTMagneFlexLib.onSendNFCCommandCallback(e);
 }
 
@@ -609,7 +609,7 @@ var MTMagneFlexLib = {
             else if (curUserAgent.indexOf("Windows") > 0) {
                 (async function () {
                     await CefSharp.BindObjectAsync('mfxJSInterface');
-                    mfxJSInterface.requestSendNFCCommand(readerParam, requestParam, onSendNFCCommandComplet);
+                    mfxJSInterface.requestSendNFCCommand(readerParam, requestParam, onSendNFCCommandComplete);
                 })();
             }            
         }        
