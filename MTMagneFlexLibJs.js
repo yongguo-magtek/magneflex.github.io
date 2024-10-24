@@ -653,7 +653,7 @@ var MTMagneFlexLib = {
         var callbackforname = this.eventPool.filter(e => e.name == name);
         for (cb in callbackforname) {
             evthandler = callbackforname[cb];
-            evthandler.callBack(evtObject);
+            evthandler.callback(evtObject);
         }
         
         // fire for name for "all"
