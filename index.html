@@ -18,6 +18,7 @@ http://www.w3.org/1999/xhtml">
 <button onclick="sendCommand();">Send Command</button>
 <button onclick="startNFCAccess();">Start NFC</button>
 <button onclick="stopNFCAccess();">Stop NFC</button>
+<button onclick="sendNFCCommand();">Send NFC Command (60)</button>
 <br />
 <div>
     <button onclick="clearLog();">Clear Log</button>
@@ -52,11 +53,11 @@ http://www.w3.org/1999/xhtml">
     }
 
     function startNFCListener() {
-        MTMagneFlexLib.addEventListener("all", dumpEvent, function(x) {log(x);})
+        MTMagneFlexLib.addEventListener("UserEvent", dumpEvent, function(x) {log(x);})
     }
 
     function stopNFCListener() {
-        MTMagneFlexLib.removeEventListener("all", dumpEvent)
+        MTMagneFlexLib.removeEventListener("*", dumpEvent)
     }
 
     function startNFCAccess() {
@@ -102,6 +103,24 @@ http://www.w3.org/1999/xhtml">
         requestArgument.closeDeviceAfter = false;
         requestArgument.destinationURL = "";
         MTMagneFlexLib.requestSendCommand(readerArgument,requestArgument,function(x){log("Command Response : " + x);})
+    }
+
+    function sendNFCCommand() {
+        var command = "60";
+        readerArgument = new MTMagneFlexParameter.readerParameter();
+        readerArgument.timeLimit = '1E';
+        readerArgument.hideUI = true;
+        readerArgument.command = command;
+        readerArgument.lastCommand = false;
+        readerArgument.encrypt = false;
+
+        
+        requestArgument = new MTMagneFlexParameter.requestParameter();
+        requestArgument.operation = MagneFlexOp.REQUEST_SEND_NFC_COMMAND;
+        requestArgument.httpMethod = HTTPMethod.NONE;
+        requestArgument.closeDeviceAfter = false;
+        requestArgument.destinationURL = "";
+        MTMagneFlexLib.requestSendNFCCommand(readerArgument,requestArgument,function(x){log("NFC Command Response : " + x);})
     }
     
 </script>
