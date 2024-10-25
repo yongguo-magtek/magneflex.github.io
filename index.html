@@ -28,7 +28,6 @@ http://www.w3.org/1999/xhtml">
 
 <script lang="javascript">
     function testScript() {
-        log ("Test");
         var script = $("#testinput").val();
         eval(script);
     };
@@ -37,7 +36,9 @@ http://www.w3.org/1999/xhtml">
         logArea = $("#logarea");
         var newValue = logArea.val() + x + "\n";
         logArea.val( newValue );
-        logArea.scrollTop = logArea.scrollHeight;
+
+        logArea.scrollTop(logArea[0].scrollHeight);
+        
         console.log(x + "\n");
     }
 
@@ -54,6 +55,12 @@ http://www.w3.org/1999/xhtml">
 
     function startNFCListener() {
         MTMagneFlexLib.addEventListener("UserEvent", dumpEvent, function(x) {log(x);})
+
+        // callback
+        // sucess 
+        //  opType=OPEN_DEVICE_RESULT&errorCode=0&errorMessage=OK&SerialNumber=B545AB5&Model=DynaFlex II Go&Firmware=1000009421-AA5-PCI&passInData=
+        // failed
+        //  opType=OPEN_DEVICE_RESULT&errorCode=2&errorMessage=The operation couldn’t be completed. (MagneFLEX error 2.)&errorDetailMessage=The operation couldn’t be completed. (MagneFLEX error 2.)&passInData=
     }
 
     function stopNFCListener() {
@@ -72,6 +79,10 @@ http://www.w3.org/1999/xhtml">
         requestArgument.closeDeviceAfter = false;
         requestArgument.destinationURL = "";
         MTMagneFlexLib.requestStartNFC(readerArgument,requestArgument,function (x){log("startNFC Response : " + x)})
+
+        // callback
+        //   opType=START_NFC_RESULT&errorCode=0&errorMessage=OK&CardType=mifare_ultralight&UID=04B94516B72A81&passInData=
+        // 
     }
 
     function stopNFCAccess() {
@@ -86,6 +97,9 @@ http://www.w3.org/1999/xhtml">
         requestArgument.closeDeviceAfter = false;
         requestArgument.destinationURL = "";
         MTMagneFlexLib.requestStopNFC(readerArgument,requestArgument,function (x){log("stopNFC Response : " + x)})
+
+        // callback
+        //   CloseDeviceComplete:opType=CLOSE_DEVICE_RESULT&errorCode=0&errorMessage=OK&operationStatus=00&passInData=
 
     }
 
@@ -121,6 +135,11 @@ http://www.w3.org/1999/xhtml">
         requestArgument.closeDeviceAfter = false;
         requestArgument.destinationURL = "";
         MTMagneFlexLib.requestSendNFCCommand(readerArgument,requestArgument,function(x){log("NFC Command Response : " + x);})
+
+        // callback
+        // success
+        // failed 
+        //   opType=SEND_NFC_COMMAND_RESULT&errorCode=2&errorMessage=The operation couldn’t be completed. (MagneFLEX error 2.)&errorDetailMessage=The operation couldn’t be completed. (MagneFLEX error 2.)&passInData=
     }
     
 </script>

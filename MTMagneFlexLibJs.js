@@ -690,9 +690,12 @@ var MTMagneFlexLib = {
     },
 
     removeEventListener : function (name, callback) {
+
+        var evtPool = this.eventPool;
+
         if (name === "*") {
             // remove all listeners
-            this.eventPool.length = 0;
+            evtPool.length = 0;
         }
         else if (typeof callback === "undefined") {
             // remove all with this name
@@ -701,18 +704,18 @@ var MTMagneFlexLib = {
             {
                 index = this.eventPool.findIndex(e=>e.name == name);
                 if (index >= 0) {
-                    this.eventPool.splice(index,1);
+                    evtPool.splice(index,1);
                 }
             }
         } else {
             // remove one
-            var index = this.eventPool.findIndex(e=>e.name == name);
+            var index = evtPool.findIndex(e=>e.name == name);
             if (index >= 0) {
-                this.eventPool.splice(index,1);
+                evtPool.splice(index,1);
             }
         }
         
-        if (this.eventPool.length == 0) {
+        if (evtPool.length == 0) {
             readerArgument = new MTMagneFlexParameter.readerParameter();
         
             requestArgument = new MTMagneFlexParameter.requestParameter();
@@ -722,6 +725,8 @@ var MTMagneFlexLib = {
             requestArgument.destinationURL = "";
             this.requestCloseDevice(readerArgument, requestArgument, function(x){ log("CloseDeviceComplete:"+x) });
         }
+
+        this.eventPool = evtPool;
     }
 };
 
