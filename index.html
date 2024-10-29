@@ -54,7 +54,8 @@ http://www.w3.org/1999/xhtml">
     }
 
     function startNFCListener() {
-        MTMagneFlexLib.addEventListener("UserEvent", dumpEvent, function(x) {log(x);})
+        //MTMagneFlexLib.addEventListener("UserEvent", dumpEvent, function(x) {log(x);})
+        MTMagneFlexLib.addEventListener("all", dumpEvent, function(x) {log(x);})
 
         // callback
         // sucess 

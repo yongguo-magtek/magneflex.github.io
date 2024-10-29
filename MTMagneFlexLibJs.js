@@ -646,7 +646,11 @@ var MTMagneFlexLib = {
     },
     eventPool : [],
 
-    onEvent: function(name, data) {
+    _handleEvent : function(name, data) {
+
+    },
+
+    _callbackEvent : function(name, data) {
 
         evtObject = { name : name, data : data };
 
@@ -663,6 +667,12 @@ var MTMagneFlexLib = {
             evthandler = callbackforall[cb];
             evthandler.callback(evtObject);
         }
+    },
+
+    onEvent: function(name, data) {
+        self._handleEvent(name, data);
+
+        self._callbackEvent(name,data);
     },
 
     urlToObject : function (url) {
