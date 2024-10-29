@@ -670,9 +670,9 @@ var MTMagneFlexLib = {
     },
 
     onEvent: function(name, data) {
-        self._handleEvent(name, data);
+        this._handleEvent(name, data);
 
-        self._callbackEvent(name,data);
+        this._callbackEvent(name,data);
     },
 
     urlToObject : function (url) {
