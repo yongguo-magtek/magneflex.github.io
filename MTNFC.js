@@ -1,6 +1,6 @@
-import {NdefLibrary as ndef} from './ndeflibrary.js'
 
-var record = new NdefLibrary.NdefTextRecord();
+
+import {ndefLibrary} from './ndef-lib.js'
 
 var  sendNFCCommand = function(command, lastCommand, encrypt) {
     return new Promise((resolve) =>{
