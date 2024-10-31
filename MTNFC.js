@@ -73,6 +73,8 @@
     exports.connect = async function( onTagPresented ) {
         let reader = {
             scan : async function(option) {
+                console.log("start scan");
+
                 if ( typeof option !== undefined && typeof option.signal !== undefined) {
                     option.signal.onabort = async ()=>{ await stopNFCAccess(); };
                 }
@@ -95,6 +97,7 @@
 
         return new Promise((resolve) =>{
             MTMagneFlexLib.addEventListener("UserEvent", (userEvent)=>{
+                console.log(`UserEvent : name - ${userEvent.name}, data - ${userEvent.data}`);
                 onTagPresented();
             }, function(x) {
                 let response = UrlToObject(x);
