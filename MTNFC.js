@@ -73,8 +73,10 @@
     };
 
     // return a promise for the result of connect device
-    exports.connect = async function( onTagPresented ) {
-        let reader = {
+    exports.connect = async function( option ) {
+        var reader = {
+            _option : {},
+            _tag : {},
             scan : async function(option) {
                 console.log("start scan");
 
@@ -91,24 +93,58 @@
                 }
             },
             disconnect : async function () {
+                MTMagneFlexLib.removeEventListener("*");
+                return Promise.resolve("");
             }
         };
 
-        if (typeof onTagPresented === "undefined") {
-            onTagPresented = (reader)=> { 
+        if (typeof option === "undefined" || typeof option.nfc_mifare_ultralight_presented === "undefined") {
+            reader._option.nfc_mifare_ultralight_presented = (reader, tag)=> { 
                 reader.scan();
             }
-        };
+        } else {
+            reader._option.nfc_mifare_ultralight_presented = option.nfc_mifare_ultralight_presented;
+        }
+
+        if (typeof option === "undefined" || typeof option.nfc_mifare_ultralight_removed === "undefined") {
+            reader._option.nfc_mifare_ultralight_removed = (reader)=> { 
+                // do nothing
+            }
+        } else {
+            reader._option.nfc_mifare_ultralight_removed = option.nfc_mifare_ultralight_removed;
+        }
+
+        var allEventHandler = function (userEvent) {
+            console.log(`Event : name - ${userEvent.name}, data - ${userEvent.data}`);
+
+            if (userEvent.name == "UserEvent") {
+                if (userEvent.name.includes("presented")) {
+                    _tag["type"] = userEvent.name;
+                }
+                if (userEvent.name.includes("removed")) {
+                    _tag = {};
+                    if ( typeof reader._option[userEvent.name] !== "undefined") {
+                        reader._option[userEvent.name](reader);
+                    }   
+                }
+            }
+
+            if (userEvent.name == "NFCData") {
+                _tag ["UID"] = userEvent.data;
+                let tagType = _tag["type"];
+                if ( typeof reader._option[tagType] !== "undefined") {
+                    reader._option[tagType](reader, _tag);
+                }          
+            }
+        } ;
 
         return new Promise((resolve) =>{
-            MTMagneFlexLib.addEventListener("UserEvent", (userEvent)=>{
-                console.log(`UserEvent : name - ${userEvent.name}, data - ${userEvent.data}`);
-                if (userEvent.data.includes("presented")) {
-                    onTagPresented(reader);
-                }
-            }, function(x) {
+            MTMagneFlexLib.addEventListener("all", allEventHandler, function(x) {
                 let response = UrlToObject(x);
                 if (response.errorCode == 0) {
+                    reader.serialNumber = response.SerialNumber;
+                    reader.firmware = response.Firmware;
+                    reader.model = response.Model;
                     resolve(reader);
                 } else {
                     throw Error(response.errorMessage);

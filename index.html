@@ -147,12 +147,15 @@ http://www.w3.org/1999/xhtml">
     }
 
     function ConnectNFCReader() {
-        mtnfc.connect()
-        .then((reader)=>{
-            reader.onreading = (data)=>{
-                log("nfc read data - " + data);
-            };
-        })
+        mtnfc.connect( {nfc_mifare_ultralight_presented : (reader, tag)=>{
+            log("UID " + tag.UID);
+            reader.scan()
+                .then((reader)=>{
+                    reader.onreading = (data)=>{
+                        log("nfc read data - " + data);
+                    };
+                });
+        }} )
         .oncatch((e)=>{
             log("error " + e);
         });
