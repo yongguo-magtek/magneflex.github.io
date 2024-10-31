@@ -65,8 +65,11 @@
     };
 
     // read the card and triger reading, readingerror
-    var read = async function () {
-
+    var read = async function (onreading, onreadingerror) {
+        console.log("start read card");
+        if (onreading) {
+            setTimeout(()=>{ onreading("DATA READ") },100);
+        }
     };
 
     // return a promise for the result of connect device
@@ -75,13 +78,13 @@
             scan : async function(option) {
                 console.log("start scan");
 
-                if ( typeof option !== undefined && typeof option.signal !== undefined) {
+                if ( typeof option !== "undefined" && typeof option.signal !== "undefined") {
                     option.signal.onabort = async ()=>{ await stopNFCAccess(); };
                 }
 
                 var nfcStart = await startNFCAccess();
                 if (nfcStart.errorCode == 0) {
-                    read();
+                    read(this.onreading, this.onreadingerror);
                     return nfcStart;
                 } else {
                     throw Error(nfcStart.errorMessage);
