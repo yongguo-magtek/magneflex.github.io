@@ -95,7 +95,9 @@
         };
 
         if (typeof onTagPresented === "undefined") {
-            onTagPresented = reader.scan();
+            onTagPresented = ()=> { 
+                reader.scan();
+            }
         };
 
         return new Promise((resolve) =>{
