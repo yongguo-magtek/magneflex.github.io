@@ -21,7 +21,7 @@ http://www.w3.org/1999/xhtml">
 <button onclick="stopNFCAccess();">Stop NFC</button>
 <button onclick="sendNFCCommand();">Send NFC Command (60)</button>
 
-<button onclick="mtnfc.connect();">NFC Connect</button>
+<button onclick="ConnectNFCReader();">NFC Connect</button>
 <br />
 <div>
     <button onclick="clearLog();">Clear Log</button>
@@ -144,6 +144,18 @@ http://www.w3.org/1999/xhtml">
         // success
         // failed 
         //   opType=SEND_NFC_COMMAND_RESULT&errorCode=2&errorMessage=The operation couldn’t be completed. (MagneFLEX error 2.)&errorDetailMessage=The operation couldn’t be completed. (MagneFLEX error 2.)&passInData=
+    }
+
+    function ConnectNFCReader() {
+        mtnfc.connect()
+        .then((reader)=>{
+            reader.onreading = (data)=>{
+                log("nfc read data - " + data);
+            };
+        })
+        .oncatch((e)=>{
+            log("error " + e);
+        });
     }
     
 </script>

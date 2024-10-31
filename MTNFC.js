@@ -95,7 +95,7 @@
         };
 
         if (typeof onTagPresented === "undefined") {
-            onTagPresented = ()=> { 
+            onTagPresented = (reader)=> { 
                 reader.scan();
             }
         };
@@ -103,7 +103,9 @@
         return new Promise((resolve) =>{
             MTMagneFlexLib.addEventListener("UserEvent", (userEvent)=>{
                 console.log(`UserEvent : name - ${userEvent.name}, data - ${userEvent.data}`);
-                onTagPresented();
+                if (userEvent.data.includes("presented")) {
+                    onTagPresented(reader);
+                }
             }, function(x) {
                 let response = UrlToObject(x);
                 if (response.errorCode == 0) {
