@@ -147,7 +147,7 @@ http://www.w3.org/1999/xhtml">
     }
 
     function ConnectNFCReader() {
-        mtnfc.connect( {nfc_mifare_ultralight_presented : (reader, tag)=>{
+        mtnfc.connect( { nfc_mifare_ultralight_presented : (reader, tag)=>{
             log("UID " + tag.UID);
             reader.scan()
                 .then((reader)=>{
@@ -155,7 +155,8 @@ http://www.w3.org/1999/xhtml">
                         log("nfc read data - " + data);
                     };
                 });
-        }} )
+            } } 
+        )
         .oncatch((e)=>{
             log("error " + e);
         });

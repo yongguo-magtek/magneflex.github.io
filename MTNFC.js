@@ -119,7 +119,7 @@
 
             if (userEvent.name == "UserEvent") {
                 if (userEvent.name.includes("presented")) {
-                    _tag["type"] = userEvent.name;
+                    _tag.type = userEvent.name;
                 }
                 if (userEvent.name.includes("removed")) {
                     _tag = {};
@@ -130,8 +130,8 @@
             }
 
             if (userEvent.name == "NFCData") {
-                _tag ["UID"] = userEvent.data;
-                let tagType = _tag["type"];
+                _tag.UID = userEvent.data;
+                let tagType = _tag.type;
                 if ( typeof reader._option[tagType] !== "undefined") {
                     reader._option[tagType](reader, _tag);
                 }          
