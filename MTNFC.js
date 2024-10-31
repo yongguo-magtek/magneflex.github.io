@@ -67,8 +67,8 @@
     // read the card and triger reading, readingerror
     var read = async function (onreading, onreadingerror) {
         console.log("start read card");
-        if (onreading) {
-            setTimeout(()=>{ onreading("DATA READ") },100);
+        if (typeof onreading !== "undefined") {
+            setTimeout(()=>{ onreading("DATA READ"); },100);
         }
     };
 
