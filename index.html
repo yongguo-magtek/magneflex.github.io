@@ -5,6 +5,7 @@ http://www.w3.org/1999/xhtml">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <script src="MTMagneFlexLibJs.js" type="text/javascript"></script>
+<script src="MTNFC.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" type="text/javascript"></script>
 <title>MagneFlex Sample</title>
 
@@ -19,6 +20,8 @@ http://www.w3.org/1999/xhtml">
 <button onclick="startNFCAccess();">Start NFC</button>
 <button onclick="stopNFCAccess();">Stop NFC</button>
 <button onclick="sendNFCCommand();">Send NFC Command (60)</button>
+
+<button onclick="mtnfc.connect();">NFC Connect</button>
 <br />
 <div>
     <button onclick="clearLog();">Clear Log</button>
