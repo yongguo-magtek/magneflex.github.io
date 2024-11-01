@@ -1,2 +1,6 @@
 testscript -- onEvent
 MTMagneFlexLib.onEvent("Test1", "Data1"); // fire for all , Test1
+
+if (typeof MTMagneFlexLib.onEvent !== 'undefined') { MTMagneFlexLib.onEvent("UserEvent", "nfc_mifare_ultralight_presented, 01000100");}
+
+if (typeof MTMagneFlexLib.onEvent !== 'undefined') { MTMagneFlexLib.onEvent("NFCData", "04371F71BF6180");}

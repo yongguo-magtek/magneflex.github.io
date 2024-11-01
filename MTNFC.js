@@ -118,22 +118,22 @@
             console.log(`Event : name - ${userEvent.name}, data - ${userEvent.data}`);
 
             if (userEvent.name == "UserEvent") {
-                if (userEvent.name.includes("presented")) {
-                    _tag.type = userEvent.name;
+                if (userEvent.data.includes("presented")) {
+                    reader._tag.type = userEvent.data.split(",",1)[0];
                 }
-                if (userEvent.name.includes("removed")) {
-                    _tag = {};
-                    if ( typeof reader._option[userEvent.name] !== "undefined") {
-                        reader._option[userEvent.name](reader);
+                if (userEvent.data.includes("removed")) {
+                    reader._tag = {};
+                    if ( typeof reader._option[userEvent.data] !== "undefined") {
+                        reader._option[userEvent.data](reader);
                     }   
                 }
             }
 
             if (userEvent.name == "NFCData") {
-                _tag.UID = userEvent.data;
-                let tagType = _tag.type;
+                reader._tag.UID = userEvent.data;
+                let tagType = reader._tag.type;
                 if ( typeof reader._option[tagType] !== "undefined") {
-                    reader._option[tagType](reader, _tag);
+                    reader._option[tagType](reader, reader._tag);
                 }          
             }
         } ;
