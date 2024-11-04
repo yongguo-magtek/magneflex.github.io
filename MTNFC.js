@@ -74,6 +74,11 @@
             setTimeout(()=>{ onreading("DATA READ"); },100);
         }
     };
+    
+    var sendNfc = async function (command, lastCommand) {
+        console.log("sendNfc");
+        return await exports.send(command, lastCommand);
+    };
 
     // return a promise for the result of connect device
     exports.connect = async function( option ) {
@@ -94,7 +99,7 @@
                 if (nfcStart.errorCode == 0) {
                     if (nfcStart.CardType == "mifare_ultralight") {
                         // ntag
-                        this.card = new NTag(exports.send);
+                        this.card = new NTag(sendNfc);
                         this.card.UID = nfcStart.UID;
 
                         read(this.card.readAll, this.onreading, this.onreadingerror);
