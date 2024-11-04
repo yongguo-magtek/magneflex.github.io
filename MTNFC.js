@@ -171,6 +171,7 @@
 
     // return a promise for the result of sending
     exports.send = async function (command, lastCommand) {
+        console.log(`try send nfc command : ${command}`);
         if (typeof lastCommand === "undefined")
             lastCommand = false;
 

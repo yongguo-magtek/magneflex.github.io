@@ -2,6 +2,10 @@ class NTag {
     /// use raw command to read/write ntag card
     /// @param sendNfc : an async function to send nfc command
     constructor(sendNfc) {
+        if (typeof sendNfc === "undefined") {
+            console.log("Need NFC command interface for NTAG class")
+            throw Error("Need NFC command interface for NTAG class")
+        }
         this.GET_VERSION = "60";
         this.READ = "30";
         this.FAST_READ = "3A";
