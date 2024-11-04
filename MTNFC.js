@@ -67,8 +67,16 @@
     // read the card and triger reading, readingerror
     var read = async function (onreading, onreadingerror) {
         console.log("start read card");
-        if (typeof onreading !== "undefined") {
-            setTimeout(()=>{ onreading("DATA READ"); },100);
+        if (typeof this.card !== "undefined") {
+            var allBytes = await this.card.readAll();
+            let message = NdefLibrary.NDefMessage.fromByteArray(allBytes);
+            if (typeof onreading !== "undefined") {
+                setTimeout(()=>{ onreading("DATA READ"); },100);
+            }
+        } else {
+            if (typeof onreadingerror !== "undefined") {
+                setTimeout(()=>{ onreadingerror("Unknown card"); },100);
+            }
         }
     };
 
@@ -89,6 +97,11 @@
                 }
                 var nfcStart = await startNFCAccess();
                 if (nfcStart.errorCode == 0) {
+                    if (nfcStart.CardType === "mifare_ultralight") {
+                        // ntag
+                        this.card = NTag(this.send);
+                        this.card.UID = nfcStart.UID;
+                    }
                     read(this.onreading, this.onreadingerror);
                     return nfcStart;
                 } else {
@@ -133,11 +146,13 @@
             }
 
             if (userEvent.name == "NFCData") {
-                reader._tag.UID = userEvent.data;
-                let tagType = reader._tag.type;
-                if ( typeof reader._option[tagType] !== "undefined") {
-                    reader._option[tagType](reader, reader._tag);
-                }          
+                if (typeof reader._tag.UID === "undefined") {
+                    reader._tag.UID = userEvent.data;
+                    let tagType = reader._tag.type;
+                    if ( typeof reader._option[tagType] !== "undefined") {
+                        reader._option[tagType](reader, reader._tag);
+                    }       
+                }   
             }
         } ;
 
