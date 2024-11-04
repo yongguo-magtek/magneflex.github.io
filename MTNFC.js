@@ -99,7 +99,8 @@
                 if (nfcStart.errorCode == 0) {
                     if (nfcStart.CardType == "mifare_ultralight") {
                         // ntag
-                        this.card = NTag(exports.send);
+                        console.log("construct NTag class");
+                        this.card = new NTag(exports.send);
                         this.card.UID = nfcStart.UID;
                     }
                     read(this.onreading, this.onreadingerror);
