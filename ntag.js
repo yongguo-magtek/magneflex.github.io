@@ -91,7 +91,7 @@ class NTag {
     }
 
     async readOne(block, lastCommand = false) {
-        console.log("Read lock " + block);
+        console.log("Read block " + block);
         const hexBlock = block.toString(16).padStart(2, '0').toUpperCase();
         const vhex = await this.sendNfc(this.READ + hexBlock, lastCommand);
         return this.byteArrayFromHexString(vhex);

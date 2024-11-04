@@ -65,7 +65,7 @@
     };
 
     // read the card and triger reading, readingerror
-    var read = async function (readAll, onreading, onreadingerror) {
+    var read = async function (readAll , onreading, onreadingerror) {
         console.log("start read card");
 
         var allBytes = await readAll();
@@ -102,7 +102,9 @@
                         this.card = new NTag(sendNfc);
                         this.card.UID = nfcStart.UID;
 
-                        this.read(this.card.readAll, this.onreading, this.onreadingerror);
+                        setTimeout(()=>{
+                            this.read( this.onreading, this.onreadingerror);
+                        });
                     }
                     
                     return nfcStart;
@@ -114,7 +116,15 @@
                 MTMagneFlexLib.removeEventListener("*");
                 return Promise.resolve("");
             },
-            read : read
+            read : async function ( onreading, onreadingerror) {
+                console.log("start read card");
+        
+                var allBytes = await this.card.readAll();
+                //let message = NdefLibrary.NDefMessage.fromByteArray(allBytes);
+                if (typeof onreading !== "undefined") {
+                    setTimeout(()=>{ onreading(allBytes); },100);
+                }
+            }
         };
 
         if (typeof option === "undefined" || typeof option.nfc_mifare_ultralight_presented === "undefined") {
