@@ -23,6 +23,8 @@ class NTag {
     }
 
     async readAll() {
+        console.log("NTAG readAll");
+
         if (this.userSize === 0) {
             const vhex = await this.readOne(0);
             this.userSize = vhex.length > 15 ? vhex[14] : 0;
@@ -92,6 +94,8 @@ class NTag {
         const hexStartBlock = startBlock.toString(16).padStart(2, '0').toUpperCase();
         const hexEndBlock = endBlock.toString(16).padStart(2, '0').toUpperCase();
         const vhex = await this.sendNfc(this.FAST_READ + hexStartBlock + hexEndBlock, lastCommand);
+
+        console.log("READ_READ - " + vhex);
         return this.byteArrayFromHexString(vhex);
     }
 

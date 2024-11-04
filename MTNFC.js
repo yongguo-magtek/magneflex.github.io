@@ -84,6 +84,9 @@
                     option.signal.onabort = async ()=>{ await stopNFCAccess(); };
                 }
 
+                if (typeof this.card !== "undefined") {
+                    delete this.card;
+                }
                 var nfcStart = await startNFCAccess();
                 if (nfcStart.errorCode == 0) {
                     read(this.onreading, this.onreadingerror);
