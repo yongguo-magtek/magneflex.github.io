@@ -32,6 +32,8 @@ class NTag {
         if (this.userSize === 0) {
             const vhex = await this.readOne(0);
             this.userSize = vhex.length > 15 ? vhex[14] : 0;
+        } else {
+            console.log("SIZE is " + this.userSize);
         }
 
         const readCount = 255 - 4; // read all in one shot
