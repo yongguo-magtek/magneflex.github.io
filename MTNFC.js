@@ -97,9 +97,9 @@
                 }
                 var nfcStart = await startNFCAccess();
                 if (nfcStart.errorCode == 0) {
-                    if (nfcStart.CardType === "mifare_ultralight") {
+                    if (nfcStart.CardType == "mifare_ultralight") {
                         // ntag
-                        this.card = NTag(this.send);
+                        this.card = NTag(exports.send);
                         this.card.UID = nfcStart.UID;
                     }
                     read(this.onreading, this.onreadingerror);
