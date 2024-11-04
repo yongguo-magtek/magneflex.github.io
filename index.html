@@ -167,7 +167,7 @@ http://www.w3.org/1999/xhtml">
 
     async function sendNfcDummy(command, lastCommand) {
         console.log(`dummy send(${command},${lastCommand})`);
-        return Promise.resolve("OK");
+        return await mtnfc.send(command, lastCommand)
     }
 
     function TestNDEF() {
