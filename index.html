@@ -165,7 +165,15 @@ http://www.w3.org/1999/xhtml">
         });
     }
 
+    async function sendNfcDummy(command, lastCommand) {
+        console.log(`dummy send(${command},${lastCommand})`);
+        return Promise.resolve("OK");
+    }
+
     function TestNDEF() {
+        let tag = new NTag(sendNfcDummy);
+        tag.readAll();
+
         var ndefRecord = new NdefLibrary.NdefRecord();
      	var ndefMessage = new NdefLibrary.NdefMessage(ndefRecord);
      	var ndefMessageByteArray = ndefMessage.toByteArray();
