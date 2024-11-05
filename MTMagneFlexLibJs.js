@@ -166,7 +166,6 @@ function onStopNFCComplete(e) {
 }
 
 function onSendNFCCommandComplete(e) {
-    log("onSendNFCCommandComplete - " + e)
     MTMagneFlexLib.onSendNFCCommandCallback(e);
 }
 

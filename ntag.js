@@ -1,3 +1,41 @@
+class MTNFCTLV {
+    constructor(Tag, Value) {
+        this.Tag = Tag;
+        this.Value = Value;
+    }
+
+    static parse(data) {
+        let index = 0;
+        const result = [];
+
+        while (index < data.length) {
+            const tag = data[index];
+            index += 1;
+
+            if (tag === 0xFE) { // terminator
+                break;
+            }
+
+            const length1 = data[index];
+            index += 1;
+
+            let length = length1;
+            if (length1 === 0xFF) {
+                length = data[index] * 256 + data[index + 1];
+                index += 2;
+            }
+            const valueEndIndex = index + length;
+
+            const value = data.slice(index, valueEndIndex);
+            index = valueEndIndex;
+            result.push(new MTNFCTLV(tag, value));
+        }
+
+        return result;
+    }
+}
+
+
 class NTag {
     /// use raw command to read/write ntag card
     /// @param sendNfc : an async function to send nfc command
@@ -57,6 +95,13 @@ class NTag {
     async readNdef() {
         const all = await this.readAll();
 
+        let tlvs = MTNFCTLV.parse(all);
+        let messages = tlvs.map((tlv)=>NdefLibrary.NDefMessage.fromByteArray(tlv.Value));
+
+        let records = [];
+        
+        messages.map(m=> records.concat( m.getRecords()) );
+
         var ndefMessage = NdefLibrary.NdefMessage.fromByteArray(all);
         return ndefMessage;
     }
@@ -85,6 +130,7 @@ class NTag {
         return success;
     }
 
+    /// @param records | message 
     async writeNdef(records) {
         const data = MTNdef.BuildNDEFMessage(records);
         return await this.writeAll(data);

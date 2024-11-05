@@ -120,9 +120,12 @@
                 console.log("start read card");
         
                 var allBytes = await this.card.readAll();
+                let tlvs = MTNFCTLV.parse(allBytes);
+                let messages = tlvs.map((tlv)=>NdefLibrary.NDefMessage.fromByteArray(tlv.Value));
+
                 //let message = NdefLibrary.NDefMessage.fromByteArray(allBytes);
                 if (typeof onreading !== "undefined") {
-                    setTimeout(()=>{ onreading(allBytes); },100);
+                    setTimeout(()=>{ onreading(messages.length == 1 ? messages[0] : messages); },100);
                 }
             }
         };
